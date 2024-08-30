@@ -2,6 +2,7 @@ const express = require("express");
 const db = require("./db");
 const routesCategories = require("./routes/categories");
 const routesUsers = require("./routes/users");
+const routesFinances = require("./routes/finances");
 
 const app = express();
 app.use(express.json());
@@ -14,6 +15,7 @@ app.get("/", (req, res) => {
 
 app.use("/categories", routesCategories);
 app.use("/users", routesUsers);
+app.use("/finances", routesFinances);
 
 app.listen(port, () => {
   db.connect()
