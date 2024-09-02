@@ -58,4 +58,50 @@ router.post("/", async (req, res) => {
   }
 });
 
+router.delete("/:id", async (req, res) => {
+  try {
+    const { email } = req.headers;
+    const { id } = req.params;
+
+    if (email.length < 5 || !email.includes("@")) {
+      return res.status(400).json({ error: "E-mail is invalid." });
+    }
+
+    if (!id) {
+      return res.status(400).json({ error: "Id is mandatory." });
+    }
+
+    const userQuery = await db.query(usersQueries.findByEmail(email));
+    if (!userQuery.rows[0]) {
+      return res.status(400).json({ error: "User does not exists." });
+    }
+
+    const findFinanceText = "SELECT * FROM finances WHERE id=$1";
+    const findFinanceValue = [Number(id)];
+    const financeItemQuery = await db.query(findFinanceText, findFinanceValue);
+
+    if (!financeItemQuery.rows[0]) {
+      return res.status(400).json({ error: "Finance row not found." });
+    }
+
+    if (financeItemQuery.rows[0].users_id !== userQuery.rows[0].id) {
+      return res
+        .status(401)
+        .json({ error: "Finance row does not belong to user." });
+    }
+
+    const text = "DELETE FROM finances WHERE id=$1 RETURNING *";
+    const values = [Number(id)];
+    const deleteResponse = await db.query(text, values);
+
+    if (!deleteResponse.rows[0]) {
+      return res.status(400).json({ error: "Finance row not deleted." });
+    }
+
+    return res.status(200).json(deleteResponse.rows[0]);
+  } catch (error) {
+    return res.status(500).json(error);
+  }
+});
+
 module.exports = router;
