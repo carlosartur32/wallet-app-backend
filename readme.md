@@ -2,7 +2,7 @@
 
 ## Intro
 
-This is an API created using Node.js, Express and PostgresSQL. 
+This is an API created using Node.js, Express and PostgresSQL.
 The main goal is create an application that controls user finances.
 
 ## Requirements
@@ -12,7 +12,7 @@ The main goal is create an application that controls user finances.
 
 ## Documentation
 
-Use insomina to import the file bellow: 
+Use insomina to import the file bellow: https://github.com/carlosartur32/wallet-app-backend/blob/master/Insomnia.json
 
 ## Steps to run the project
 
